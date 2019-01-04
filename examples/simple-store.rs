@@ -47,10 +47,7 @@ fn test_getput<'env, 's>(
     writer
 }
 
-fn test_delete<'env, 's>(
-    store: MultiStore,
-    mut writer: MultiWriter<'env, &'s str>,
-) -> MultiWriter<'env, &'s str> {
+fn test_delete<'env, 's>(store: MultiStore, mut writer: MultiWriter<'env, &'s str>) -> MultiWriter<'env, &'s str> {
     let keys = vec!["str1", "str2", "str3"];
     let vals = vec!["string uno", "string quatro", "string siete"];
     // we convert the writer into a cursor so that we can safely read

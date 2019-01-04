@@ -503,9 +503,9 @@ mod tests {
         {
             let mut iter = curs.get(multistore, "str1").unwrap();
             let (id, val) = iter.next().unwrap();
-                assert_eq!((id, val.unwrap().unwrap()), (&b"str1"[..], Value::Str("str1 bar")));
+            assert_eq!((id, val.unwrap().unwrap()), (&b"str1"[..], Value::Str("str1 bar")));
             let (id, val) = iter.next().unwrap();
-                assert_eq!((id, val.unwrap().unwrap()), (&b"str1"[..], Value::Str("str1 foo")));
+            assert_eq!((id, val.unwrap().unwrap()), (&b"str1"[..], Value::Str("str1 foo")));
         }
         let writer = curs.into_writer();
         writer.commit().unwrap();

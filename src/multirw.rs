@@ -14,7 +14,7 @@ use lmdb::{
     Cursor,
     Database,
     Iter as LmdbIter,
-//    IterDup as LmdbIterDup,
+    //    IterDup as LmdbIterDup,
     RoCursor,
     RoTransaction,
     RwTransaction,
@@ -26,7 +26,10 @@ use lmdb::WriteFlags;
 
 use error::StoreError;
 
-use value::{OwnedValue, Value};
+use value::{
+    OwnedValue,
+    Value,
+};
 
 fn read_transform(val: Result<&[u8], lmdb::Error>) -> Result<Option<Value>, StoreError> {
     match val {
@@ -88,7 +91,10 @@ where
     pub fn get(&self, store: MultiStore, k: K) -> Result<Iter, StoreError> {
         let mut cursor = self.tx.open_ro_cursor(store.0).map_err(StoreError::LmdbError)?;
         let iter = cursor.iter_dup_of(k);
-        Ok(Iter{ iter, cursor })
+        Ok(Iter {
+            iter,
+            cursor,
+        })
     }
 
     /// Provides a cursor to all of the values for the duplicate entries that match this key
@@ -141,7 +147,7 @@ where
         let bytes = v.to_bytes()?;
         self.tx.put(store.0, &k, &bytes, flags).map_err(StoreError::LmdbError)
     }
-    
+
     pub fn delete_all(&mut self, store: MultiStore, k: K) -> Result<(), StoreError> {
         self.tx.del(store.0, &k, None).map_err(StoreError::LmdbError)
     }
@@ -193,8 +199,8 @@ where
         self.tx.abort();
     }
 
-    /* TODO - Figure out how to solve the need to have the cursor stick around when 
-     *        we are producing iterators from MultiIter 
+    /* TODO - Figure out how to solve the need to have the cursor stick around when
+     *        we are producing iterators from MultiIter
     /// Provides an iterator starting at the lexographically smallest value in the store
     pub fn iter_start(&self, store: MultiStore) -> Result<MultiIter, StoreError> {
         let mut cursor = self.tx.open_ro_cursor(store.0).map_err(StoreError::LmdbError)?;
